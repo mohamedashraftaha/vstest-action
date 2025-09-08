@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
-import {create, UploadOptions} from '@actions/artifact';
-import {findFilesToUpload} from './search';
-import {getInputs} from './input-helper';
-import {NoFileOptions} from './constants';
+import { create, UploadOptions } from '@actions/artifact';
+import { findFilesToUpload } from './search';
+import { getInputs } from './input-helper';
+import { NoFileOptions } from './constants';
 
 export async function uploadArtifact() {
   try {
@@ -38,36 +38,38 @@ export async function uploadArtifact() {
       )
       core.debug(`Root artifact directory is ${searchResult.rootDirectory}`)
 
-      if (searchResult.filesToUpload.length > 10000) {
-        core.warning(
-          `There are over 10,000 files in this artifact, consider create an archive before upload to improve the upload performance.`
-        )
-      }
+      core.info(`New artifact upload feature is currently disabled`);
 
-      const artifactClient = create()
-      const options: UploadOptions = {
-        continueOnError: false
-      }
-      if (inputs.retentionDays) {
-        options.retentionDays = inputs.retentionDays
-      }
+      // if (searchResult.filesToUpload.length > 10000) {
+      //   core.warning(
+      //     `There are over 10,000 files in this artifact, consider create an archive before upload to improve the upload performance.`
+      //   )
+      // }
 
-      const uploadResponse = await artifactClient.uploadArtifact(
-        inputs.artifactName,
-        searchResult.filesToUpload,
-        searchResult.rootDirectory,
-        options
-      )
+      // const artifactClient = create()
+      // const options: UploadOptions = {
+      //   continueOnError: false
+      // }
+      // if (inputs.retentionDays) {
+      //   options.retentionDays = inputs.retentionDays
+      // }
 
-      if (uploadResponse.failedItems.length > 0) {
-        core.setFailed(
-          `An error was encountered when uploading ${uploadResponse.artifactName}. There were ${uploadResponse.failedItems.length} items that failed to upload.`
-        )
-      } else {
-        core.info(
-          `Artifact ${uploadResponse.artifactName} has been successfully uploaded!`
-        )
-      }
+      // const uploadResponse = await artifactClient.uploadArtifact(
+      //   inputs.artifactName,
+      //   searchResult.filesToUpload,
+      //   searchResult.rootDirectory,
+      //   options
+      // )
+
+      // if (uploadResponse.failedItems.length > 0) {
+      //   core.setFailed(
+      //     `An error was encountered when uploading ${uploadResponse.artifactName}. There were ${uploadResponse.failedItems.length} items that failed to upload.`
+      //   )
+      // } else {
+      //   core.info(
+      //     `Artifact ${uploadResponse.artifactName} has been successfully uploaded!`
+      //   )
+      // }
     }
   } catch (err) {
     core.setFailed(err.message)
